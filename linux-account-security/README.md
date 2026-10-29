@@ -53,6 +53,10 @@ Distinguished **human accounts** (e.g. user4, user8) from **system accounts** (e
 
 Linux administration · account security · `/etc/passwd` & `/etc/shadow` · password hashing & salting · users/groups · sudoers · chage · gzip/tar · crontab
 
+## Scripts
+
+The commands executed during the lab are grouped in [`scripts/linux_account_security.sh`](scripts/linux_account_security.sh) (to run only in a disposable VM).
+
 ## Documentation
 
 - [Full report (French)](docs/report-linux-users-crontab.pdf)

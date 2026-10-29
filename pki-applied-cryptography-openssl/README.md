@@ -4,7 +4,7 @@ Building a private **Public Key Infrastructure** and practising the core cryptog
 
 > Academic labs — Cryptography module, ENSA Fez (GSCSI), 2024–2025.
 
-![OpenSSL](https://img.shields.io/badge/OpenSSL-PKI-721412) ![X.509](https://img.shields.io/badge/X.509-certificates-blue) ![Crypto](https://img.shields.io/badge/RSA%20%7C%20AES%20%7C%20SHA--2-grey)
+![OpenSSL](https://img.shields.io/badge/OpenSSL-PKI-721412) ![X.509](https://img.shields.io/badge/X.509-certificates-blue) ![Crypto](https://img.shields.io/badge/RSA%20%7C%20DSA%20%7C%20AES%20%7C%20SHA--2-grey)
 
 ---
 
@@ -50,11 +50,13 @@ AES-256 in CBC mode with a salt and key derivation iterations; DES encryption an
 ```bash
 openssl dgst -sha256 textOriginal.txt                      # hash
 openssl dgst -sha1 -hmac "<key>" textOriginal.txt          # HMAC (keyed hash)
-openssl dgst -sha256 -sign private.pem -out sig.sign textOriginal.txt       # sign
-openssl dgst -sha256 -verify public.pem -signature sig.sign textOriginal.txt # verify
+openssl dsaparam -genkey -out maclePr.pem 1024                               # DSA key
+openssl dsa -pubout -in maclePr.pem -out pubCle.pem                           # public key
+openssl dgst -sha256 -sign maclePr.pem -out Signature.sign textOriginal.txt   # sign
+openssl dgst -sha256 -verify pubCle.pem -signature Signature.sign textOriginal.txt # verify
 ```
 
-Integrity (SHA-1 / SHA-256 / SHA-512), authenticity (HMAC) and non-repudiation (RSA signatures), plus Base64 encoding/decoding.
+Integrity (MD5, SHA-1, SHA-256, SHA-512), authenticity (HMAC) and non-repudiation (**DSA** signatures), plus Base64 encoding/decoding.
 
 ## Concepts covered
 
@@ -65,12 +67,25 @@ Integrity (SHA-1 / SHA-256 / SHA-512), authenticity (HMAC) and non-repudiation (
 | X.509 | Standard certificate format used by TLS/HTTPS |
 | Chain of trust | Verifying a certificate back to a trusted root |
 | AES / DES | Symmetric encryption (same key both ways) |
-| RSA | Asymmetric encryption and signatures (key pair) |
+| RSA | Asymmetric encryption (key pair) |
+| DSA | Digital signatures |
 | SHA-2 / HMAC | Integrity / integrity + authenticity |
 
 ## Skills demonstrated
 
 OpenSSL · PKI · X.509 · RSA · AES · SHA-2 · HMAC · digital signatures · TLS foundations
+
+## Scripts
+
+All commands executed during the labs, grouped by topic in [`scripts/`](scripts/):
+
+| Script | Topic |
+|---|---|
+| [`01_private_pki.sh`](scripts/01_private_pki.sh) | Root CA, CSR, CA-signed certificate, chain verification |
+| [`02_symmetric_encryption.sh`](scripts/02_symmetric_encryption.sh) | Random values, Base64, Triple DES, AES-256-CBC |
+| [`03_asymmetric_rsa.sh`](scripts/03_asymmetric_rsa.sh) | RSA key pairs, protected private key, public-key encryption |
+| [`04_hashing_hmac_signatures.sh`](scripts/04_hashing_hmac_signatures.sh) | Hashing, HMAC, DSA signatures |
+| [`05_certificates.sh`](scripts/05_certificates.sh) | Self-signed and CA-signed certificates |
 
 ## Documentation
 
